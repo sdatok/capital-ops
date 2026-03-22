@@ -1,0 +1,46 @@
+[
+  {
+    "symbol": "AAPL",
+    "period": "2021",
+    "revenue": 365000000000,
+    "gross_profit": 170000000000,
+    "operating_income": 97000000000,
+    "free_cash_flow": 94000000000,
+    "capital_expenditures": 11000000000,
+    "operating_cash_flow": 135000000000,
+    "net_income": 94600000000
+  },
+  {
+    "symbol": "AAPL",
+    "period": "2022",
+    "revenue": 394000000000,
+    "gross_profit": 163000000000,
+    "operating_income": 122000000000,
+    "free_cash_flow": 112000000000,
+    "capital_expenditures": 11000000000,
+    "operating_cash_flow": 122000000000,
+    "net_income": 99800000000
+  },
+  {
+    "symbol": "MSFT",
+    "period": "2021",
+    "revenue": 168000000000,
+    "gross_profit": 132000000000,
+    "operating_income": 61000000000,
+    "free_cash_flow": 69000000000,
+    "capital_expenditures": 22000000000,
+    "operating_cash_flow": 72000000000,
+    "net_income": 61200000000
+  },
+  {
+    "symbol": "MSFT",
+    "period": "2022",
+    "revenue": 198000000000,
+    "gross_profit": 152000000000,
+    "operating_income": 69000000000,
+    "free_cash_flow": 76000000000,
+    "capital_expenditures": 25000000000,
+    "operating_cash_flow": 80000000000,
+    "net_income": 72700000000
+  }
+]
