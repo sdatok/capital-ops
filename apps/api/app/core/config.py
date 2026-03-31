@@ -6,14 +6,19 @@ from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-REPO_ROOT = Path(__file__).resolve().parents[4]
+# config.py lives at apps/api/app/core/config.py
+# parents[2] → apps/api/          (API root, works in Railway where container root = apps/api)
+# parents[3] → capital-ops/       (repo root, used only for local .env lookup)
+_API_ROOT = Path(__file__).resolve().parents[2]
+_REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
 class Settings(BaseSettings):
     """
     Central configuration for the API.
 
-    Uses the repo-level `.env` so the developer can run either app from the repo root.
+    Uses the repo-level `.env` for local dev. In production (Railway) env vars
+    are injected directly and the missing .env file is silently ignored.
     """
 
     environment: str = Field(default="development")
@@ -27,10 +32,12 @@ class Settings(BaseSettings):
     # Accepts a comma-separated string in .env, e.g. CORS_ORIGINS=http://localhost:3000
     cors_origins: str = Field(default="http://localhost:3000")
 
-    duckdb_seed_dir: str = Field(default=str(REPO_ROOT / "apps/api/data/seed"))
+    # Resolves to apps/api/data/seed in both local dev and Railway container.
+    duckdb_seed_dir: str = Field(default=str(_API_ROOT / "data" / "seed"))
 
     model_config = SettingsConfigDict(
-        env_file=str(REPO_ROOT / ".env"),
+        env_file=str(_REPO_ROOT / ".env"),
+        env_file_encoding="utf-8",
         extra="ignore",
         case_sensitive=False,
     )
