@@ -47,5 +47,6 @@ class CompanyOverview(BaseModel):
     industry: str
     fiscal_year_end_month: str
     periods: list[str]
+    is_live: bool = False
     raw: RawFinancials
     metrics: DerivedMetrics

@@ -32,6 +32,7 @@ export interface CompanyOverview {
   industry: string;
   fiscal_year_end_month: string;
   periods: string[];
+  is_live: boolean;
   raw: RawFinancials;
   metrics: DerivedMetrics;
 }

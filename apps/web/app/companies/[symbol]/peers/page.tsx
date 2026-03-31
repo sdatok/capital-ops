@@ -11,8 +11,6 @@ const PERCENT_METRICS = new Set([
   "gross_margin", "operating_margin", "fcf_margin", "capex_intensity", "revenue_growth",
 ]);
 
-const ALL_SYMBOLS = ["AAPL", "MSFT", "GOOGL", "META", "NVDA", "AMZN", "COST", "WMT", "NFLX", "TSLA"];
-
 export default function PeersPage() {
   const params = useParams();
   const symbol = (params.symbol as string).toUpperCase();
@@ -22,8 +20,8 @@ export default function PeersPage() {
   const [result, setResult] = useState<PeerCompareResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showAllPeers, setShowAllPeers] = useState(false);
 
-  // Load company list for the peer picker.
   useEffect(() => {
     searchCompanies().then(setAllCompanies).catch(() => {});
   }, []);
@@ -49,7 +47,9 @@ export default function PeersPage() {
     }
   }
 
-  const peers = allCompanies.filter((c) => c.symbol !== symbol);
+  const seededPeers = allCompanies.filter((c) => c.symbol !== symbol && c.has_data);
+  const allPeers = allCompanies.filter((c) => c.symbol !== symbol);
+  const peers = showAllPeers ? allPeers : seededPeers;
 
   return (
     <div>
@@ -69,7 +69,17 @@ export default function PeersPage() {
 
       {/* Peer picker */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6">
-        <p className="text-sm font-semibold text-gray-700 mb-3">Select peers to compare</p>
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-sm font-semibold text-gray-700">Select peers to compare</p>
+          <button
+            onClick={() => setShowAllPeers((v) => !v)}
+            className="text-xs text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+          >
+            {showAllPeers
+              ? `Show seeded only (${seededPeers.length})`
+              : `Show all tickers (${allPeers.length}) — live fetch`}
+          </button>
+        </div>
         <div className="flex flex-wrap gap-2 mb-4">
           {peers.map((c) => {
             const selected = selectedPeers.includes(c.symbol);
@@ -77,24 +87,33 @@ export default function PeersPage() {
               <button
                 key={c.symbol}
                 onClick={() => togglePeer(c.symbol)}
+                title={c.has_data ? c.name : `${c.name} — will be fetched live`}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
                   selected
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-700 border-gray-200 hover:border-blue-400"
+                    ? "bg-indigo-600 text-white border-indigo-600"
+                    : c.has_data
+                    ? "bg-white text-gray-700 border-gray-200 hover:border-indigo-400"
+                    : "bg-gray-50 text-gray-500 border-dashed border-gray-200 hover:border-indigo-300"
                 }`}
               >
                 {c.symbol}
+                {!c.has_data && <span className="ml-1 text-[10px] opacity-60">⚡</span>}
                 <span className="ml-1.5 text-xs opacity-70 hidden sm:inline">{c.name.split(" ")[0]}</span>
               </button>
             );
           })}
         </div>
+        {showAllPeers && (
+          <p className="text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mb-3">
+            ⚡ Companies marked with a bolt will be fetched live from Yahoo Finance — first load may take a few seconds per ticker.
+          </p>
+        )}
         <button
           onClick={runComparison}
           disabled={selectedPeers.length === 0 || loading}
-          className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          {loading ? "Comparing…" : `Compare ${symbol} vs ${selectedPeers.length > 0 ? selectedPeers.join(", ") : "selected peers"}`}
+          {loading ? "Fetching data & comparing…" : `Compare ${symbol} vs ${selectedPeers.length > 0 ? selectedPeers.join(", ") : "selected peers"}`}
         </button>
       </div>
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { searchCompanies } from "@/lib/apiClient";
 import type { CompanySearchResult } from "@/lib/types";
 
@@ -21,11 +22,15 @@ function sectorBadge(sector: string): string {
 }
 
 const STATS = [
-  { value: "10", label: "Companies with full data" },
+  { value: "Any", label: "Publicly traded ticker" },
   { value: "5 yrs", label: "Annual financials" },
   { value: "6", label: "Core efficiency metrics" },
   { value: "3", label: "Scenario models" },
 ];
+
+function looksLikeTicker(q: string): boolean {
+  return /^[A-Za-z]{1,6}(-[A-Za-z])?$/.test(q.trim());
+}
 
 export default function HomePage() {
   const [companies, setCompanies] = useState<CompanySearchResult[]>([]);
@@ -33,6 +38,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setLoading(true);
@@ -49,6 +55,15 @@ export default function HomePage() {
   const seeded = companies.filter((c) => c.has_data);
   const unseeded = companies.filter((c) => !c.has_data);
   const showUnseeded = query.trim().length > 0 && unseeded.length > 0;
+  const trimmedQuery = query.trim().toUpperCase();
+  const showLookupCTA =
+    query.trim().length > 0 &&
+    looksLikeTicker(query) &&
+    !companies.some((c) => c.symbol === trimmedQuery);
+
+  function handleLookup() {
+    if (trimmedQuery) router.push(`/companies/${trimmedQuery}`);
+  }
 
   return (
     <div>
@@ -86,9 +101,10 @@ export default function HomePage() {
             <input
               ref={inputRef}
               type="text"
-              placeholder="Search ticker or company name…"
+              placeholder="Search ticker or company name… or press Enter to look up any ticker"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleLookup(); }}
               className="w-full bg-white/5 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 focus:bg-white/8 transition-all"
             />
             {query && (
@@ -177,12 +193,40 @@ export default function HomePage() {
         </>
       )}
 
+          {/* Live lookup CTA — shown when query looks like a ticker not in our universe */}
+          {showLookupCTA && (
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-4">
+                <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
+                  Not in universe — live lookup available
+                </h2>
+              </div>
+              <button
+                onClick={handleLookup}
+                className="group flex items-center gap-4 bg-white border border-indigo-200 rounded-xl px-5 py-4 hover:border-indigo-400 hover:shadow-md hover:shadow-indigo-50 transition-all duration-200 text-left w-full max-w-sm"
+              >
+                <div className="w-10 h-10 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-100 transition-colors">
+                  <svg className="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-gray-900 font-mono">{trimmedQuery}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Fetch live from Yahoo Finance →
+                  </p>
+                </div>
+                <svg className="w-4 h-4 text-gray-300 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          )}
+
       {/* Footer hint */}
       {!query && !loading && !error && (
         <p className="text-xs text-gray-400 border-t border-gray-100 pt-6">
-          Showing 10 companies with full 5-year financials. Search to see the full 58-company universe. 
-          Run <code className="font-mono bg-gray-100 px-1 rounded">python -m scripts.refresh_seed_data</code> from{" "}
-          <code className="font-mono bg-gray-100 px-1 rounded">apps/api</code> to seed additional companies.
+          10 companies pre-seeded for instant load. Search any ticker to look it up live via Yahoo Finance.
         </p>
       )}
     </div>

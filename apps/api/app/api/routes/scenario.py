@@ -6,6 +6,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 
 from app.duckdb.db import get_conn
+from app.services.dynamic_fetch import fetch_live
 from app.schemas.scenario import (
     MemoRequest,
     MemoResponse,
@@ -30,38 +31,53 @@ def _get_company_latest(conn, symbol: str) -> dict | None:
     company = conn.execute(
         "SELECT symbol, name, sector, industry FROM companies WHERE symbol = ?", [symbol]
     ).fetchone()
-    if not company:
+
+    if company:
+        rows = conn.execute(
+            """
+            SELECT period, revenue, gross_profit, operating_income, free_cash_flow,
+                   capital_expenditures, operating_cash_flow, net_income
+            FROM financials_annual WHERE symbol = ? ORDER BY period DESC LIMIT 2
+            """,
+            [symbol],
+        ).fetchall()
+        if rows:
+            latest = rows[0]
+            prior = rows[1] if len(rows) > 1 else None
+            rev = latest[1]
+            return {
+                "symbol": company[0],
+                "name": company[1],
+                "sector": company[2],
+                "industry": company[3],
+                "latest_period": latest[0],
+                "latest_revenue": rev,
+                "latest_op_margin": operating_margin(latest[3], rev),
+                "latest_fcf_margin": fcf_margin(latest[4], rev),
+                "latest_rev_growth": revenue_growth(rev, prior[1]) if prior else None,
+            }
+
+    overview = fetch_live(symbol)
+    if not overview or not overview.periods:
         return None
 
-    rows = conn.execute(
-        """
-        SELECT period, revenue, gross_profit, operating_income, free_cash_flow,
-               capital_expenditures, operating_cash_flow, net_income
-        FROM financials_annual WHERE symbol = ? ORDER BY period DESC LIMIT 2
-        """,
-        [symbol],
-    ).fetchall()
-    if not rows:
-        return None
+    revenues   = overview.raw.revenue
+    op_incomes = overview.raw.operating_income
+    fcfs       = overview.raw.free_cash_flow
 
-    latest = rows[0]
-    prior = rows[1] if len(rows) > 1 else None
-
-    rev = latest[1]
-    rev_growth = revenue_growth(rev, prior[1]) if prior else None
-    op_m = operating_margin(latest[3], rev)
-    fcf_m = fcf_margin(latest[4], rev)
+    latest_rev  = revenues[-1]
+    prior_rev   = revenues[-2] if len(revenues) > 1 else None
 
     return {
-        "symbol": company[0],
-        "name": company[1],
-        "sector": company[2],
-        "industry": company[3],
-        "latest_period": latest[0],
-        "latest_revenue": rev,
-        "latest_op_margin": op_m,
-        "latest_fcf_margin": fcf_m,
-        "latest_rev_growth": rev_growth,
+        "symbol":            overview.symbol,
+        "name":              overview.name,
+        "sector":            overview.sector,
+        "industry":          overview.industry,
+        "latest_period":     overview.periods[-1],
+        "latest_revenue":    latest_rev,
+        "latest_op_margin":  operating_margin(op_incomes[-1], latest_rev),
+        "latest_fcf_margin": fcf_margin(fcfs[-1], latest_rev),
+        "latest_rev_growth": revenue_growth(latest_rev, prior_rev) if prior_rev else None,
     }
 
 

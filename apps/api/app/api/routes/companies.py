@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.duckdb.db import get_conn
 from app.schemas.company import CompanyOverview, CompanySearchResult, DerivedMetrics, RawFinancials
+from app.services.dynamic_fetch import fetch_live
 from app.services.metrics import (
     capex_intensity,
     cash_conversion,
@@ -55,22 +56,24 @@ def company_overview(symbol: str) -> CompanyOverview:
         [sym],
     ).fetchone()
 
-    if not company_row:
+    fin_rows = None
+    if company_row:
+        fin_rows = conn.execute(
+            """
+            SELECT period, revenue, gross_profit, operating_income, free_cash_flow,
+                   capital_expenditures, operating_cash_flow, net_income
+            FROM financials_annual
+            WHERE symbol = ?
+            ORDER BY period
+            """,
+            [sym],
+        ).fetchall()
+
+    if not company_row or not fin_rows:
+        overview = fetch_live(sym)
+        if overview:
+            return overview
         raise HTTPException(status_code=404, detail=f"Company '{sym}' not found")
-
-    fin_rows = conn.execute(
-        """
-        SELECT period, revenue, gross_profit, operating_income, free_cash_flow,
-               capital_expenditures, operating_cash_flow, net_income
-        FROM financials_annual
-        WHERE symbol = ?
-        ORDER BY period
-        """,
-        [sym],
-    ).fetchall()
-
-    if not fin_rows:
-        raise HTTPException(status_code=404, detail=f"No financials found for '{sym}'")
 
     periods = [r[0] for r in fin_rows]
     revenues = [r[1] for r in fin_rows]
@@ -92,6 +95,7 @@ def company_overview(symbol: str) -> CompanyOverview:
         industry=company_row[3],
         fiscal_year_end_month=company_row[4],
         periods=periods,
+        is_live=False,
         raw=RawFinancials(
             revenue=revenues,
             gross_profit=gross_profits,

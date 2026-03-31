@@ -1,12 +1,15 @@
 import Link from "next/link";
 
-const PIPELINE_STEPS = [
-  { label: "Yahoo Finance", sub: "Primary source", icon: "↗" },
-  { label: "yfinance", sub: "Offline refresh script", icon: "⟳" },
+const SEEDED_PATH = [
+  { label: "yfinance script", sub: "Offline refresh", icon: "⟳" },
   { label: "Seed JSON", sub: "Committed to repo", icon: "◈" },
-  { label: "DuckDB", sub: "In-memory at startup", icon: "⚡" },
-  { label: "FastAPI", sub: "Deterministic metrics", icon: "⟨/⟩" },
-  { label: "Next.js", sub: "Browser render", icon: "◻" },
+  { label: "DuckDB", sub: "In-memory at startup", icon: "▦" },
+];
+
+const LIVE_PATH = [
+  { label: "Any ticker", sub: "User request", icon: "⌨" },
+  { label: "yfinance", sub: "On-demand fetch", icon: "⚡" },
+  { label: "Memory cache", sub: "Cached per process", icon: "◈" },
 ];
 
 const METRICS = [
@@ -177,36 +180,100 @@ export default function AboutPage() {
           <span className="text-xs font-bold text-gray-900 uppercase tracking-widest">Data pipeline</span>
           <div className="flex-1 h-px bg-gray-100" />
         </div>
-        <div className="bg-slate-950 rounded-2xl p-6 overflow-x-auto">
-          <div className="flex items-stretch gap-0 min-w-max">
-            {PIPELINE_STEPS.map((step, i) => (
-              <div key={step.label} className="flex items-center">
-                <div className="flex flex-col items-center text-center w-28">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 text-sm font-mono mb-2">
-                    {step.icon}
+        <div className="bg-slate-950 rounded-2xl p-6">
+          {/* Two paths */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+            {/* Seeded path */}
+            <div>
+              <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-3">
+                Seeded path — 10 companies
+              </p>
+              <div className="flex items-center gap-0 overflow-x-auto">
+                {SEEDED_PATH.map((step, i) => (
+                  <div key={step.label} className="flex items-center">
+                    <div className="flex flex-col items-center text-center w-24">
+                      <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-sm font-mono mb-1.5">
+                        {step.icon}
+                      </div>
+                      <p className="text-xs font-semibold text-white leading-tight">{step.label}</p>
+                      <p className="text-[10px] text-slate-500 mt-0.5">{step.sub}</p>
+                    </div>
+                    {i < SEEDED_PATH.length - 1 && (
+                      <div className="flex items-center mx-0.5">
+                        <div className="w-4 h-px bg-indigo-500/30" />
+                        <svg className="w-2.5 h-2.5 text-indigo-600" fill="currentColor" viewBox="0 0 6 6">
+                          <path d="M0 3l6-3v6L0 3z" />
+                        </svg>
+                      </div>
+                    )}
                   </div>
-                  <p className="text-xs font-semibold text-white">{step.label}</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">{step.sub}</p>
-                </div>
-                {i < PIPELINE_STEPS.length - 1 && (
-                  <div className="flex items-center mx-1">
-                    <div className="w-6 h-px bg-white/10" />
-                    <svg className="w-3 h-3 text-indigo-600" fill="currentColor" viewBox="0 0 6 6">
-                      <path d="M0 3l6-3v6L0 3z" />
-                    </svg>
-                  </div>
-                )}
+                ))}
               </div>
-            ))}
+            </div>
+            {/* Live path */}
+            <div>
+              <p className="text-[10px] font-bold text-amber-400 uppercase tracking-widest mb-3">
+                Live path — any publicly traded ticker
+              </p>
+              <div className="flex items-center gap-0 overflow-x-auto">
+                {LIVE_PATH.map((step, i) => (
+                  <div key={step.label} className="flex items-center">
+                    <div className="flex flex-col items-center text-center w-24">
+                      <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-sm font-mono mb-1.5">
+                        {step.icon}
+                      </div>
+                      <p className="text-xs font-semibold text-white leading-tight">{step.label}</p>
+                      <p className="text-[10px] text-slate-500 mt-0.5">{step.sub}</p>
+                    </div>
+                    {i < LIVE_PATH.length - 1 && (
+                      <div className="flex items-center mx-0.5">
+                        <div className="w-4 h-px bg-amber-500/30" />
+                        <svg className="w-2.5 h-2.5 text-amber-600" fill="currentColor" viewBox="0 0 6 6">
+                          <path d="M0 3l6-3v6L0 3z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <p className="text-xs text-slate-500 mt-6 border-t border-white/5 pt-4 leading-relaxed">
-            The app never calls a live third-party API at runtime. Data is pre-fetched and committed
-            to the repo — fast, reliable, and immune to upstream outages.{" "}
+
+          {/* Shared tail */}
+          <div className="border-t border-white/5 pt-4 flex items-center gap-4 mb-4">
+            <div className="flex-1 h-px bg-indigo-500/20" />
+            <div className="flex flex-col items-center text-center">
+              <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 text-sm font-mono mb-1.5">
+                ⟨/⟩
+              </div>
+              <p className="text-xs font-semibold text-white">FastAPI</p>
+              <p className="text-[10px] text-slate-500 mt-0.5">Metrics engine</p>
+            </div>
+            <div className="flex items-center">
+              <div className="w-4 h-px bg-white/10" />
+              <svg className="w-2.5 h-2.5 text-slate-500" fill="currentColor" viewBox="0 0 6 6">
+                <path d="M0 3l6-3v6L0 3z" />
+              </svg>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 text-sm font-mono mb-1.5">
+                ◻
+              </div>
+              <p className="text-xs font-semibold text-white">Next.js</p>
+              <p className="text-[10px] text-slate-500 mt-0.5">Browser render</p>
+            </div>
+            <div className="flex-1 h-px bg-amber-500/20" />
+          </div>
+
+          <p className="text-xs text-slate-500 leading-relaxed">
+            10 companies are pre-seeded for instant load times. Any other publicly traded ticker is
+            fetched on demand from Yahoo Finance, computed through the same metrics engine, and
+            cached in memory for the process lifetime. Run{" "}
             <code className="font-mono text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded text-[11px]">
               python -m scripts.refresh_seed_data
             </code>{" "}
-            from <code className="font-mono text-slate-400 text-[11px]">apps/api</code> pulls fresh
-            data from Yahoo Finance and overwrites the seed files.
+            from <code className="font-mono text-slate-400 text-[11px]">apps/api</code> to refresh
+            the seeded data.
           </p>
         </div>
       </section>

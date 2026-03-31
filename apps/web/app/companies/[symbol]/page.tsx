@@ -58,10 +58,16 @@ export default function CompanyOverviewPage() {
               {data.sector} &middot; {data.industry} &middot; FY ends {data.fiscal_year_end_month}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs font-medium bg-blue-50 text-blue-700 px-3 py-1 rounded-full">
               FY{lastPeriod} data
             </span>
+            {data.is_live && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                Live via Yahoo Finance
+              </span>
+            )}
             <button
               onClick={() => router.push(`/companies/${symbol}/peers`)}
               className="text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors"

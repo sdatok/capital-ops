@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.duckdb.db import get_conn
 from app.schemas.peers import MetricComparison, PeerCompareRequest, PeerCompareResponse, PeerMetricSeries
+from app.services.dynamic_fetch import fetch_live
 from app.services.metrics import (
     capex_intensity,
     cash_conversion,
@@ -70,31 +71,45 @@ def _fetch_company_financials(conn, symbol: str) -> dict | None:
     company = conn.execute(
         "SELECT symbol, name FROM companies WHERE symbol = ?", [symbol]
     ).fetchone()
-    if not company:
-        return None
 
-    rows = conn.execute(
-        """
-        SELECT period, revenue, gross_profit, operating_income, free_cash_flow,
-               capital_expenditures, operating_cash_flow, net_income
-        FROM financials_annual WHERE symbol = ? ORDER BY period
-        """,
-        [symbol],
-    ).fetchall()
-    if not rows:
+    if company:
+        rows = conn.execute(
+            """
+            SELECT period, revenue, gross_profit, operating_income, free_cash_flow,
+                   capital_expenditures, operating_cash_flow, net_income
+            FROM financials_annual WHERE symbol = ? ORDER BY period
+            """,
+            [symbol],
+        ).fetchall()
+        if rows:
+            return {
+                "symbol":               company[0],
+                "name":                 company[1],
+                "periods":              [r[0] for r in rows],
+                "revenue":              [r[1] for r in rows],
+                "gross_profit":         [r[2] for r in rows],
+                "operating_income":     [r[3] for r in rows],
+                "free_cash_flow":       [r[4] for r in rows],
+                "capital_expenditures": [r[5] for r in rows],
+                "operating_cash_flow":  [r[6] for r in rows],
+                "net_income":           [r[7] for r in rows],
+            }
+
+    overview = fetch_live(symbol)
+    if not overview:
         return None
 
     return {
-        "symbol": company[0],
-        "name": company[1],
-        "periods": [r[0] for r in rows],
-        "revenue": [r[1] for r in rows],
-        "gross_profit": [r[2] for r in rows],
-        "operating_income": [r[3] for r in rows],
-        "free_cash_flow": [r[4] for r in rows],
-        "capital_expenditures": [r[5] for r in rows],
-        "operating_cash_flow": [r[6] for r in rows],
-        "net_income": [r[7] for r in rows],
+        "symbol":               overview.symbol,
+        "name":                 overview.name,
+        "periods":              overview.periods,
+        "revenue":              overview.raw.revenue,
+        "gross_profit":         overview.raw.gross_profit,
+        "operating_income":     overview.raw.operating_income,
+        "free_cash_flow":       overview.raw.free_cash_flow,
+        "capital_expenditures": overview.raw.capital_expenditures,
+        "operating_cash_flow":  overview.raw.operating_cash_flow,
+        "net_income":           overview.raw.net_income,
     }
 
 
