@@ -76,16 +76,27 @@ def fetch_live(symbol: str, years: int = 5) -> Optional[CompanyOverview]:
         if sym in _cache:
             return _cache[sym]
 
+    # Fetch financial statements first — these are the critical path.
+    # Separate try/except so that a flaky ticker.info call doesn't block
+    # the entire fetch (ticker.info is known to fail intermittently in yfinance).
     try:
         ticker = yf.Ticker(sym)
         income = ticker.income_stmt
         cashflow = ticker.cash_flow
-        info = ticker.info or {}
     except Exception:
         return None
 
     if income is None or income.empty:
         return None
+
+    # Metadata is best-effort — fall back to safe defaults if unavailable.
+    info: dict = {}
+    try:
+        raw_info = ticker.info
+        if isinstance(raw_info, dict):
+            info = raw_info
+    except Exception:
+        pass
 
     cols = list(income.columns)[:years]
     if not cols:
@@ -93,37 +104,40 @@ def fetch_live(symbol: str, years: int = 5) -> Optional[CompanyOverview]:
 
     rows = []
     for col in cols:
-        rev = _to_millions(_get(income[col], INCOME_FIELDS["revenue"]))
-        if rev is None:
+        try:
+            rev = _to_millions(_get(income[col], INCOME_FIELDS["revenue"]))
+            if rev is None:
+                continue
+
+            gp  = _to_millions(_get(income[col], INCOME_FIELDS["gross_profit"]))
+            oi  = _to_millions(_get(income[col], INCOME_FIELDS["operating_income"]))
+            ni  = _to_millions(_get(income[col], INCOME_FIELDS["net_income"]))
+
+            cf_col = (
+                cashflow[col]
+                if (cashflow is not None and not cashflow.empty and col in cashflow.columns)
+                else None
+            )
+            ocf       = _to_millions(_get(cf_col, CASHFLOW_FIELDS["operating_cash_flow"])) if cf_col is not None else None
+            raw_capex = _get(cf_col, CASHFLOW_FIELDS["capital_expenditures"]) if cf_col is not None else None
+            capex     = _to_millions(abs(raw_capex)) if raw_capex is not None else None
+            fcf_val   = _to_millions(_get(cf_col, CASHFLOW_FIELDS["free_cash_flow"])) if cf_col is not None else None
+
+            if fcf_val is None and ocf is not None and capex is not None:
+                fcf_val = round(ocf - capex, 1)
+
+            rows.append({
+                "period":               str(col.year),
+                "revenue":              rev      or 0,
+                "gross_profit":         gp       or 0,
+                "operating_income":     oi       or 0,
+                "free_cash_flow":       fcf_val  or 0,
+                "capital_expenditures": capex    or 0,
+                "operating_cash_flow":  ocf      or 0,
+                "net_income":           ni       or 0,
+            })
+        except Exception:
             continue
-
-        gp  = _to_millions(_get(income[col], INCOME_FIELDS["gross_profit"]))
-        oi  = _to_millions(_get(income[col], INCOME_FIELDS["operating_income"]))
-        ni  = _to_millions(_get(income[col], INCOME_FIELDS["net_income"]))
-
-        cf_col = (
-            cashflow[col]
-            if (cashflow is not None and not cashflow.empty and col in cashflow.columns)
-            else None
-        )
-        ocf       = _to_millions(_get(cf_col, CASHFLOW_FIELDS["operating_cash_flow"])) if cf_col is not None else None
-        raw_capex = _get(cf_col, CASHFLOW_FIELDS["capital_expenditures"]) if cf_col is not None else None
-        capex     = _to_millions(abs(raw_capex)) if raw_capex is not None else None
-        fcf_val   = _to_millions(_get(cf_col, CASHFLOW_FIELDS["free_cash_flow"])) if cf_col is not None else None
-
-        if fcf_val is None and ocf is not None and capex is not None:
-            fcf_val = round(ocf - capex, 1)
-
-        rows.append({
-            "period":               str(col.year),
-            "revenue":              rev      or 0,
-            "gross_profit":         gp       or 0,
-            "operating_income":     oi       or 0,
-            "free_cash_flow":       fcf_val  or 0,
-            "capital_expenditures": capex    or 0,
-            "operating_cash_flow":  ocf      or 0,
-            "net_income":           ni       or 0,
-        })
 
     if not rows:
         return None
