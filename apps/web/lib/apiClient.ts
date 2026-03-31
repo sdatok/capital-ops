@@ -3,6 +3,7 @@ import type {
   CompanySearchResult,
   MemoResponse,
   PeerCompareResponse,
+  QualityScore,
   SaveAnalysisResponse,
   ScenarioInputs,
   ScenarioResponse,
@@ -73,6 +74,10 @@ export async function saveAnalysis(payload: {
   });
   if (!res.ok) throw new Error(`API error ${res.status}`);
   return res.json();
+}
+
+export async function getQualityScore(symbol: string): Promise<QualityScore> {
+  return apiFetch<QualityScore>(`/api/quality/${symbol.toUpperCase()}`);
 }
 
 export async function comparePeers(

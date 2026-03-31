@@ -77,6 +77,32 @@ export interface SaveAnalysisResponse {
   id: string;
 }
 
+// Quality Score
+export interface ScoreComponent {
+  key: string;
+  name: string;
+  weight: number;
+  raw_value: number | null;
+  component_score: number;
+  points_earned: number;
+  points_max: number;
+  interpretation: string;
+  formula: string;
+  benchmark: string;
+}
+
+export interface QualityScore {
+  symbol: string;
+  name: string;
+  total_score: number;
+  grade: string;
+  grade_label: string;
+  grade_color: string;
+  components: ScoreComponent[];
+  periods_analyzed: number;
+  summary: string;
+}
+
 // Peer comparison
 export interface PeerMetricSeries {
   symbol: string;

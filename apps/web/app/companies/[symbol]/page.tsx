@@ -69,6 +69,12 @@ export default function CompanyOverviewPage() {
               </span>
             )}
             <button
+              onClick={() => router.push(`/companies/${symbol}/quality`)}
+              className="text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 px-3 py-1 rounded-full transition-colors"
+            >
+              Quality Score →
+            </button>
+            <button
               onClick={() => router.push(`/companies/${symbol}/peers`)}
               className="text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors"
             >
