@@ -1,0 +1,55 @@
+---
+description: Project-wide rules for Capital Ops
+---
+
+You are helping build a portfolio-grade full-stack finance and analytics product.
+
+Project goals:
+- Make this project strong for finance, analyst, and PM-type roles
+- Keep the product unique and not a generic stock dashboard
+- Optimize for recruiter demo value
+- Keep the MVP realistic and shippable
+
+Tech stack:
+- Next.js + TypeScript frontend
+- Python FastAPI backend
+- PostgreSQL + DuckDB
+- Tailwind CSS
+- Recharts
+
+Product requirements:
+- The app should help users evaluate company operating efficiency and capital allocation quality
+- The app should include company overview, peer comparison, scenario modeling, and analyst memo generation
+- The UX should feel polished and recruiter-ready
+
+Rules:
+- Do not introduce unnecessary libraries
+- Prefer deterministic calculations over AI-generated outputs
+- Every metric shown in the UI must have a clear formula
+- Keep raw data separate from derived metrics
+- Build in vertical slices that can be demoed independently
+- Explain trade-offs before major architecture changes
+- Do not refactor unrelated files
+- Keep the codebase easy to explain in interviews
+- Optimize for speed to MVP and maintainability
+
+Coding style:
+- Use strict TypeScript
+- Use clear and conventional file naming
+- Write small focused functions
+- Avoid premature abstraction
+- Prefer readable code over clever code
+- Add comments only where they provide real value
+
+UI expectations:
+- Clean, modern, professional layout
+- Strong information hierarchy
+- Avoid clutter
+- Optimize for desktop first
+- Use realistic mock data where needed
+
+When implementing features:
+- Read the docs in /docs first
+- Follow the existing architecture
+- Summarize changed files after implementation
+- Mention follow-up tasks after each major change

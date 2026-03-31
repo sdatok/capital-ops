@@ -1,46 +1,61 @@
 [
-  {
-    "symbol": "AAPL",
-    "period": "2021",
-    "revenue": 365000000000,
-    "gross_profit": 170000000000,
-    "operating_income": 97000000000,
-    "free_cash_flow": 94000000000,
-    "capital_expenditures": 11000000000,
-    "operating_cash_flow": 135000000000,
-    "net_income": 94600000000
-  },
-  {
-    "symbol": "AAPL",
-    "period": "2022",
-    "revenue": 394000000000,
-    "gross_profit": 163000000000,
-    "operating_income": 122000000000,
-    "free_cash_flow": 112000000000,
-    "capital_expenditures": 11000000000,
-    "operating_cash_flow": 122000000000,
-    "net_income": 99800000000
-  },
-  {
-    "symbol": "MSFT",
-    "period": "2021",
-    "revenue": 168000000000,
-    "gross_profit": 132000000000,
-    "operating_income": 61000000000,
-    "free_cash_flow": 69000000000,
-    "capital_expenditures": 22000000000,
-    "operating_cash_flow": 72000000000,
-    "net_income": 61200000000
-  },
-  {
-    "symbol": "MSFT",
-    "period": "2022",
-    "revenue": 198000000000,
-    "gross_profit": 152000000000,
-    "operating_income": 69000000000,
-    "free_cash_flow": 76000000000,
-    "capital_expenditures": 25000000000,
-    "operating_cash_flow": 80000000000,
-    "net_income": 72700000000
-  }
+  { "symbol": "AAPL", "period": "2019", "revenue": 260174, "gross_profit": 98392, "operating_income": 63930, "free_cash_flow": 58896, "capital_expenditures": 10495, "operating_cash_flow": 69391, "net_income": 55256 },
+  { "symbol": "AAPL", "period": "2020", "revenue": 274515, "gross_profit": 104956, "operating_income": 66288, "free_cash_flow": 73365, "capital_expenditures": 7309, "operating_cash_flow": 80674, "net_income": 57411 },
+  { "symbol": "AAPL", "period": "2021", "revenue": 365817, "gross_profit": 152836, "operating_income": 108949, "free_cash_flow": 92953, "capital_expenditures": 11085, "operating_cash_flow": 104038, "net_income": 94680 },
+  { "symbol": "AAPL", "period": "2022", "revenue": 394328, "gross_profit": 170782, "operating_income": 119437, "free_cash_flow": 111443, "capital_expenditures": 10708, "operating_cash_flow": 122151, "net_income": 99803 },
+  { "symbol": "AAPL", "period": "2023", "revenue": 383285, "gross_profit": 169148, "operating_income": 114301, "free_cash_flow": 99584, "capital_expenditures": 10959, "operating_cash_flow": 110543, "net_income": 96995 },
+
+  { "symbol": "MSFT", "period": "2019", "revenue": 125843, "gross_profit": 82933, "operating_income": 42959, "free_cash_flow": 38260, "capital_expenditures": 13925, "operating_cash_flow": 52185, "net_income": 39240 },
+  { "symbol": "MSFT", "period": "2020", "revenue": 143015, "gross_profit": 96937, "operating_income": 52959, "free_cash_flow": 45234, "capital_expenditures": 15441, "operating_cash_flow": 60675, "net_income": 44281 },
+  { "symbol": "MSFT", "period": "2021", "revenue": 168088, "gross_profit": 115856, "operating_income": 69916, "free_cash_flow": 56118, "capital_expenditures": 20622, "operating_cash_flow": 76740, "net_income": 61271 },
+  { "symbol": "MSFT", "period": "2022", "revenue": 198270, "gross_profit": 135620, "operating_income": 83383, "free_cash_flow": 65149, "capital_expenditures": 23886, "operating_cash_flow": 89035, "net_income": 72738 },
+  { "symbol": "MSFT", "period": "2023", "revenue": 211915, "gross_profit": 146052, "operating_income": 88523, "free_cash_flow": 59788, "capital_expenditures": 28107, "operating_cash_flow": 87895, "net_income": 72361 },
+
+  { "symbol": "GOOGL", "period": "2019", "revenue": 161857, "gross_profit": 77270, "operating_income": 27573, "free_cash_flow": 30972, "capital_expenditures": 23548, "operating_cash_flow": 54520, "net_income": 34343 },
+  { "symbol": "GOOGL", "period": "2020", "revenue": 182527, "gross_profit": 97795, "operating_income": 41224, "free_cash_flow": 42843, "capital_expenditures": 22281, "operating_cash_flow": 65124, "net_income": 40269 },
+  { "symbol": "GOOGL", "period": "2021", "revenue": 257637, "gross_profit": 146698, "operating_income": 78714, "free_cash_flow": 67012, "capital_expenditures": 24963, "operating_cash_flow": 91975, "net_income": 76033 },
+  { "symbol": "GOOGL", "period": "2022", "revenue": 282836, "gross_profit": 156633, "operating_income": 74842, "free_cash_flow": 60010, "capital_expenditures": 31485, "operating_cash_flow": 91495, "net_income": 59972 },
+  { "symbol": "GOOGL", "period": "2023", "revenue": 307394, "gross_profit": 174062, "operating_income": 84293, "free_cash_flow": 69495, "capital_expenditures": 32251, "operating_cash_flow": 101746, "net_income": 73795 },
+
+  { "symbol": "META", "period": "2019", "revenue": 70697, "gross_profit": 52534, "operating_income": 23986, "free_cash_flow": 20316, "capital_expenditures": 15102, "operating_cash_flow": 35418, "net_income": 18485 },
+  { "symbol": "META", "period": "2020", "revenue": 85965, "gross_profit": 69273, "operating_income": 32671, "free_cash_flow": 23632, "capital_expenditures": 15115, "operating_cash_flow": 38747, "net_income": 29146 },
+  { "symbol": "META", "period": "2021", "revenue": 117929, "gross_profit": 97806, "operating_income": 46753, "free_cash_flow": 39116, "capital_expenditures": 19244, "operating_cash_flow": 57683, "net_income": 39370 },
+  { "symbol": "META", "period": "2022", "revenue": 116609, "gross_profit": 88559, "operating_income": 28944, "free_cash_flow": 18271, "capital_expenditures": 32204, "operating_cash_flow": 50475, "net_income": 23200 },
+  { "symbol": "META", "period": "2023", "revenue": 134902, "gross_profit": 111837, "operating_income": 46751, "free_cash_flow": 43008, "capital_expenditures": 28101, "operating_cash_flow": 71109, "net_income": 39098 },
+
+  { "symbol": "NVDA", "period": "2020", "revenue": 10918, "gross_profit": 6673, "operating_income": 2846, "free_cash_flow": 4272, "capital_expenditures": 489, "operating_cash_flow": 4761, "net_income": 2796 },
+  { "symbol": "NVDA", "period": "2021", "revenue": 16675, "gross_profit": 10396, "operating_income": 4532, "free_cash_flow": 4694, "capital_expenditures": 489, "operating_cash_flow": 5822, "net_income": 4332 },
+  { "symbol": "NVDA", "period": "2022", "revenue": 26914, "gross_profit": 17475, "operating_income": 10041, "free_cash_flow": 8132, "capital_expenditures": 976, "operating_cash_flow": 9108, "net_income": 9752 },
+  { "symbol": "NVDA", "period": "2023", "revenue": 26974, "gross_profit": 15356, "operating_income": 4224, "free_cash_flow": 3808, "capital_expenditures": 1833, "operating_cash_flow": 5641, "net_income": 4368 },
+  { "symbol": "NVDA", "period": "2024", "revenue": 60922, "gross_profit": 44301, "operating_income": 32972, "free_cash_flow": 26943, "capital_expenditures": 2108, "operating_cash_flow": 29051, "net_income": 29760 },
+
+  { "symbol": "AMZN", "period": "2019", "revenue": 280522, "gross_profit": 114986, "operating_income": 14541, "free_cash_flow": 21653, "capital_expenditures": 16861, "operating_cash_flow": 38514, "net_income": 11588 },
+  { "symbol": "AMZN", "period": "2020", "revenue": 386064, "gross_profit": 152757, "operating_income": 22899, "free_cash_flow": 25924, "capital_expenditures": 40140, "operating_cash_flow": 66064, "net_income": 21331 },
+  { "symbol": "AMZN", "period": "2021", "revenue": 469822, "gross_profit": 197478, "operating_income": 24879, "free_cash_flow": -14726, "capital_expenditures": 61053, "operating_cash_flow": 46327, "net_income": 33364 },
+  { "symbol": "AMZN", "period": "2022", "revenue": 513983, "gross_profit": 225152, "operating_income": 12248, "free_cash_flow": -16893, "capital_expenditures": 63645, "operating_cash_flow": 46752, "net_income": -2722 },
+  { "symbol": "AMZN", "period": "2023", "revenue": 574785, "gross_profit": 270668, "operating_income": 36852, "free_cash_flow": 32217, "capital_expenditures": 52729, "operating_cash_flow": 84946, "net_income": 30425 },
+
+  { "symbol": "COST", "period": "2019", "revenue": 152703, "gross_profit": 16322, "operating_income": 4737, "free_cash_flow": 3393, "capital_expenditures": 2998, "operating_cash_flow": 6391, "net_income": 3659 },
+  { "symbol": "COST", "period": "2020", "revenue": 166761, "gross_profit": 18451, "operating_income": 5435, "free_cash_flow": 6051, "capital_expenditures": 2810, "operating_cash_flow": 8861, "net_income": 4002 },
+  { "symbol": "COST", "period": "2021", "revenue": 192052, "gross_profit": 22395, "operating_income": 6708, "free_cash_flow": 4424, "capital_expenditures": 3588, "operating_cash_flow": 8012, "net_income": 5007 },
+  { "symbol": "COST", "period": "2022", "revenue": 222730, "gross_profit": 25126, "operating_income": 7793, "free_cash_flow": 2722, "capital_expenditures": 4670, "operating_cash_flow": 7392, "net_income": 5844 },
+  { "symbol": "COST", "period": "2023", "revenue": 242290, "gross_profit": 26949, "operating_income": 8114, "free_cash_flow": 4208, "capital_expenditures": 4323, "operating_cash_flow": 8531, "net_income": 6292 },
+
+  { "symbol": "WMT", "period": "2020", "revenue": 523964, "gross_profit": 129562, "operating_income": 20568, "free_cash_flow": 14550, "capital_expenditures": 10705, "operating_cash_flow": 25255, "net_income": 14881 },
+  { "symbol": "WMT", "period": "2021", "revenue": 559151, "gross_profit": 140561, "operating_income": 22548, "free_cash_flow": 25810, "capital_expenditures": 10264, "operating_cash_flow": 36074, "net_income": 13673 },
+  { "symbol": "WMT", "period": "2022", "revenue": 572754, "gross_profit": 143754, "operating_income": 25942, "free_cash_flow": 11075, "capital_expenditures": 13106, "operating_cash_flow": 24181, "net_income": 13673 },
+  { "symbol": "WMT", "period": "2023", "revenue": 611289, "gross_profit": 147568, "operating_income": 20428, "free_cash_flow": 1014, "capital_expenditures": 16857, "operating_cash_flow": 17871, "net_income": 11680 },
+  { "symbol": "WMT", "period": "2024", "revenue": 648125, "gross_profit": 160483, "operating_income": 27012, "free_cash_flow": 13852, "capital_expenditures": 21874, "operating_cash_flow": 35726, "net_income": 15511 },
+
+  { "symbol": "NFLX", "period": "2019", "revenue": 20156, "gross_profit": 7509, "operating_income": 2604, "free_cash_flow": -3274, "capital_expenditures": 253, "operating_cash_flow": -3021, "net_income": 1867 },
+  { "symbol": "NFLX", "period": "2020", "revenue": 24996, "gross_profit": 9979, "operating_income": 4585, "free_cash_flow": 1939, "capital_expenditures": 524, "operating_cash_flow": 2463, "net_income": 2761 },
+  { "symbol": "NFLX", "period": "2021", "revenue": 29698, "gross_profit": 12154, "operating_income": 6195, "free_cash_flow": -702, "capital_expenditures": 244, "operating_cash_flow": -458, "net_income": 5116 },
+  { "symbol": "NFLX", "period": "2022", "revenue": 31616, "gross_profit": 13248, "operating_income": 5633, "free_cash_flow": 1616, "capital_expenditures": 407, "operating_cash_flow": 2023, "net_income": 4492 },
+  { "symbol": "NFLX", "period": "2023", "revenue": 33723, "gross_profit": 14968, "operating_income": 7008, "free_cash_flow": 6926, "capital_expenditures": 238, "operating_cash_flow": 7164, "net_income": 5408 },
+
+  { "symbol": "TSLA", "period": "2019", "revenue": 24578, "gross_profit": 4069, "operating_income": -69, "free_cash_flow": 1078, "capital_expenditures": 1327, "operating_cash_flow": 2405, "net_income": -862 },
+  { "symbol": "TSLA", "period": "2020", "revenue": 31536, "gross_profit": 6630, "operating_income": 1994, "free_cash_flow": 2786, "capital_expenditures": 3157, "operating_cash_flow": 5943, "net_income": 721 },
+  { "symbol": "TSLA", "period": "2021", "revenue": 53823, "gross_profit": 13656, "operating_income": 6523, "free_cash_flow": 4982, "capital_expenditures": 6515, "operating_cash_flow": 11497, "net_income": 5524 },
+  { "symbol": "TSLA", "period": "2022", "revenue": 81462, "gross_profit": 20853, "operating_income": 13656, "free_cash_flow": 7566, "capital_expenditures": 7158, "operating_cash_flow": 14724, "net_income": 12556 },
+  { "symbol": "TSLA", "period": "2023", "revenue": 96773, "gross_profit": 17660, "operating_income": 8891, "free_cash_flow": 4357, "capital_expenditures": 8898, "operating_cash_flow": 13255, "net_income": 14974 }
 ]
