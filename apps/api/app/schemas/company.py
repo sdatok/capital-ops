@@ -10,6 +10,7 @@ class CompanySearchResult(BaseModel):
     name: str
     sector: str
     industry: str
+    has_data: bool = True
 
 
 class RawFinancials(BaseModel):

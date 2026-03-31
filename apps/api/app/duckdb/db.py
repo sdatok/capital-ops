@@ -31,6 +31,17 @@ def _init_conn() -> duckdb.DuckDBPyConnection:
         [str(companies_path)],
     )
 
+    extended_path = seed_dir / "companies_extended.json"
+    if extended_path.exists():
+        conn.execute(
+            """
+            INSERT INTO companies
+            SELECT * FROM read_json_auto(?)
+            WHERE symbol NOT IN (SELECT symbol FROM companies)
+            """,
+            [str(extended_path)],
+        )
+
     financials_path = seed_dir / "financials_annual_seed.json"
     conn.execute(
         "CREATE TABLE financials_annual AS SELECT * FROM read_json_auto(?)",

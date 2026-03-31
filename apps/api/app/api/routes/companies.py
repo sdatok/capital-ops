@@ -20,24 +20,27 @@ router = APIRouter(prefix="/api/companies", tags=["companies"])
 def search_companies(q: str = "") -> list[CompanySearchResult]:
     conn = get_conn()
 
+    base_query = """
+        SELECT c.symbol, c.name, c.sector, c.industry,
+               (COUNT(f.symbol) > 0) AS has_data
+        FROM companies c
+        LEFT JOIN financials_annual f ON f.symbol = c.symbol
+        {where}
+        GROUP BY c.symbol, c.name, c.sector, c.industry
+        ORDER BY has_data DESC, c.name
+    """
+
     if q.strip():
         term = f"%{q.strip().lower()}%"
         rows = conn.execute(
-            """
-            SELECT symbol, name, sector, industry
-            FROM companies
-            WHERE lower(name) LIKE ? OR lower(symbol) LIKE ?
-            ORDER BY name
-            """,
+            base_query.format(where="WHERE lower(c.name) LIKE ? OR lower(c.symbol) LIKE ?"),
             [term, term],
         ).fetchall()
     else:
-        rows = conn.execute(
-            "SELECT symbol, name, sector, industry FROM companies ORDER BY name"
-        ).fetchall()
+        rows = conn.execute(base_query.format(where="")).fetchall()
 
     return [
-        CompanySearchResult(symbol=r[0], name=r[1], sector=r[2], industry=r[3])
+        CompanySearchResult(symbol=r[0], name=r[1], sector=r[2], industry=r[3], has_data=bool(r[4]))
         for r in rows
     ]
 

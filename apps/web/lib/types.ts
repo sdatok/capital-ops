@@ -3,6 +3,7 @@ export interface CompanySearchResult {
   name: string;
   sector: string;
   industry: string;
+  has_data: boolean;
 }
 
 export interface RawFinancials {
