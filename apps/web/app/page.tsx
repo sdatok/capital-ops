@@ -87,8 +87,8 @@ export default function HomePage() {
           </h1>
           <p className="text-slate-400 text-base leading-relaxed mb-8 max-w-xl">
             Capital Ops surfaces the metrics that matter to fundamental investors — operating
-            efficiency, cash conversion, capex discipline, and margin trends — across 5 years of
-            audited financials.
+            efficiency, free cash flow conversion, capex discipline, and margin trends — across
+            5 years of audited financials.
           </p>
 
           {/* Search */}
@@ -130,6 +130,95 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* How it works */}
+      {!query && (
+        <div className="mb-10">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest">How it works</span>
+            <div className="flex-1 h-px bg-gray-100" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {[
+              {
+                step: "01",
+                title: "Search any company",
+                desc: "10 companies pre-seeded for instant load. Any other publicly traded ticker is fetched live from Yahoo Finance and cached.",
+                accent: "indigo",
+                icon: (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                  </svg>
+                ),
+              },
+              {
+                step: "02",
+                title: "Company overview",
+                desc: "6 core efficiency metrics — revenue growth, margins, FCF, capex intensity, cash conversion — with 5-year trend charts.",
+                accent: "violet",
+                icon: (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.5l4-4 4 4 4-7 4 4" />
+                  </svg>
+                ),
+              },
+              {
+                step: "03",
+                title: "Peer comparison",
+                desc: "Compare any combination of companies side-by-side. Historical metric trend charts and a ranked table by latest period.",
+                accent: "sky",
+                icon: (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                ),
+              },
+              {
+                step: "04",
+                title: "Scenario + memo",
+                desc: "Model bull, base, and bear outcomes with custom assumptions. Generate a deterministic analyst memo referencing only real numbers.",
+                accent: "emerald",
+                icon: (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                ),
+              },
+            ].map((item, i, arr) => {
+              const styles: Record<string, { icon: string; step: string; border: string }> = {
+                indigo:  { icon: "bg-indigo-50 text-indigo-600 border-indigo-100",  step: "text-indigo-300",  border: "hover:border-indigo-200"  },
+                violet:  { icon: "bg-violet-50 text-violet-600 border-violet-100",  step: "text-violet-300",  border: "hover:border-violet-200"  },
+                sky:     { icon: "bg-sky-50 text-sky-600 border-sky-100",            step: "text-sky-300",     border: "hover:border-sky-200"     },
+                emerald: { icon: "bg-emerald-50 text-emerald-600 border-emerald-100",step: "text-emerald-300", border: "hover:border-emerald-200" },
+              };
+              const s = styles[item.accent];
+              return (
+                <div key={item.step} className="relative">
+                  <div className={`bg-white border border-gray-100 rounded-xl p-5 h-full flex flex-col gap-3 transition-all hover:shadow-sm ${s.border}`}>
+                    <div className="flex items-start justify-between">
+                      <div className={`w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0 ${s.icon}`}>
+                        {item.icon}
+                      </div>
+                      <span className={`text-2xl font-bold tabular-nums ${s.step}`}>{item.step}</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-gray-900 mb-1">{item.title}</p>
+                      <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                  {i < arr.length - 1 && (
+                    <div className="hidden lg:flex absolute top-1/2 -right-1.5 -translate-y-1/2 z-10 items-center justify-center w-3 h-3">
+                      <svg className="w-3 h-3 text-gray-300" fill="currentColor" viewBox="0 0 6 6">
+                        <path d="M0 3l6-3v6L0 3z" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Error */}
       {error && (

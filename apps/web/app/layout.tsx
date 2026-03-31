@@ -12,33 +12,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="min-h-screen bg-gray-50">
         <header className="bg-slate-950 border-b border-white/5 sticky top-0 z-10">
-          <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+          <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/" className="flex items-center gap-2 group">
-                <div className="w-6 h-6 rounded bg-indigo-500 flex items-center justify-center">
-                  <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <Link href="/" className="flex items-center gap-2.5 group">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                  <svg className="w-4.5 h-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.5l4-4 4 4 4-7 4 4" />
                   </svg>
                 </div>
-                <span className="text-white font-bold text-sm tracking-tight group-hover:text-indigo-300 transition-colors">
+                <span className="text-white font-bold text-base tracking-tight group-hover:text-indigo-300 transition-colors">
                   Capital Ops
                 </span>
               </Link>
-              <span className="hidden sm:block text-white/10 text-xs select-none">|</span>
+              <span className="hidden sm:block text-white/10 select-none">|</span>
               <span className="hidden sm:block text-slate-500 text-xs">
                 Capital allocation &amp; operating efficiency analytics
               </span>
             </div>
-            <nav className="flex items-center gap-1 text-sm">
+            <nav className="flex items-center gap-1">
               <Link
                 href="/"
-                className="text-slate-400 hover:text-white hover:bg-white/5 px-3 py-1.5 rounded-lg transition-all text-xs font-medium"
+                className="text-slate-400 hover:text-white hover:bg-white/5 px-4 py-2 rounded-lg transition-all text-sm font-medium"
               >
                 Companies
               </Link>
               <Link
                 href="/about"
-                className="text-slate-400 hover:text-white hover:bg-white/5 px-3 py-1.5 rounded-lg transition-all text-xs font-medium"
+                className="text-slate-400 hover:text-white hover:bg-white/5 px-4 py-2 rounded-lg transition-all text-sm font-medium"
               >
                 About
               </Link>

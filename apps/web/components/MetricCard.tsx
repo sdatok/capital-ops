@@ -1,4 +1,5 @@
 import { fmtMultiple, fmtPct, fmtPctSigned } from "@/lib/format";
+import Tooltip from "@/components/Tooltip";
 
 export type MetricCardVariant =
   | "percent"
@@ -13,6 +14,7 @@ interface MetricCardProps {
   period: string;
   variant: MetricCardVariant;
   formulaHint: string;
+  tooltip?: string;
 }
 
 function formatValue(value: number | null, variant: MetricCardVariant): string {
@@ -59,6 +61,7 @@ export default function MetricCard({
   period,
   variant,
   formulaHint,
+  tooltip,
 }: MetricCardProps) {
   const delta = getDeltaLabel(value, priorValue ?? null, variant);
   const invert = invertPositive.has(variant);
@@ -75,7 +78,10 @@ export default function MetricCard({
       className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-1 hover:border-gray-300 transition-colors"
       title={`Formula: ${formulaHint}`}
     >
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">{label}</p>
+      <div className="flex items-center gap-1.5">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">{label}</p>
+        {tooltip && <Tooltip text={tooltip} />}
+      </div>
       <p className="text-2xl font-bold text-gray-900 mt-1 tabular-nums">
         {formatValue(value, variant)}
       </p>

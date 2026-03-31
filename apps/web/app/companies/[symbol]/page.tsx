@@ -96,6 +96,7 @@ export default function CompanyOverviewPage() {
           period={lastPeriod}
           variant="percent_signed"
           formulaHint="(Revenue_t − Revenue_{t−1}) / Revenue_{t−1}"
+          tooltip="How much total sales grew compared to the prior year. Positive = the business is getting bigger."
         />
         <MetricCard
           label="Gross Margin"
@@ -104,6 +105,7 @@ export default function CompanyOverviewPage() {
           period={lastPeriod}
           variant="percent"
           formulaHint="Gross Profit / Revenue"
+          tooltip="The % of revenue left after paying for what was sold (raw materials, manufacturing). Higher = stronger pricing power or lower production costs."
         />
         <MetricCard
           label="Operating Margin"
@@ -112,6 +114,7 @@ export default function CompanyOverviewPage() {
           period={lastPeriod}
           variant="percent"
           formulaHint="Operating Income / Revenue"
+          tooltip="The % of revenue left after ALL operating costs — salaries, R&D, marketing, and rent. Shows how efficiently the business actually runs day-to-day."
         />
         <MetricCard
           label="FCF Margin"
@@ -120,6 +123,7 @@ export default function CompanyOverviewPage() {
           period={lastPeriod}
           variant="percent"
           formulaHint="Free Cash Flow / Revenue"
+          tooltip="The % of revenue that turns into real, usable cash — after all expenses and capital spending. Often considered the most honest profitability measure."
         />
         <MetricCard
           label="Capex Intensity"
@@ -128,6 +132,7 @@ export default function CompanyOverviewPage() {
           period={lastPeriod}
           variant="capex"
           formulaHint="Capital Expenditures / Revenue (lower = more asset-light)"
+          tooltip="How much the company spends on physical assets (equipment, factories, infrastructure) as a % of revenue. Lower = a lighter, more scalable business model."
         />
         <MetricCard
           label="Cash Conversion"
@@ -136,6 +141,7 @@ export default function CompanyOverviewPage() {
           period={lastPeriod}
           variant="multiple"
           formulaHint="Operating Cash Flow / Net Income (N/M when net income ≤ 0)"
+          tooltip="How much of the company's reported profit actually shows up as cash. A ratio above 1× is healthy. Below 1× can signal aggressive accounting or working capital issues."
         />
       </div>
 

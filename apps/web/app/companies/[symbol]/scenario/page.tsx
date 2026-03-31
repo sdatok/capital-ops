@@ -6,6 +6,7 @@ import { useState } from "react";
 import { generateMemo, projectScenarios, saveAnalysis } from "@/lib/apiClient";
 import { fmtBillions, fmtPct, fmtPctSigned } from "@/lib/format";
 import type { MemoResponse, ScenarioInputs, ScenarioProjection, ScenarioResponse } from "@/lib/types";
+import Tooltip from "@/components/Tooltip";
 
 const DEFAULT_INPUTS: ScenarioInputs = {
   bull: { revenue_growth: 0.15, operating_margin: 0.28, fcf_margin: 0.22 },
@@ -15,18 +16,27 @@ const DEFAULT_INPUTS: ScenarioInputs = {
 
 type ScenarioKey = "bull" | "base" | "bear";
 
-const SCENARIO_META: Record<ScenarioKey, { label: string; color: string; bg: string; border: string }> = {
-  bull: { label: "Bull", color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-200" },
-  base: { label: "Base", color: "text-blue-700", bg: "bg-blue-50", border: "border-blue-200" },
-  bear: { label: "Bear", color: "text-red-700", bg: "bg-red-50", border: "border-red-200" },
+const SCENARIO_META: Record<ScenarioKey, { label: string; color: string; bg: string; border: string; tooltip: string }> = {
+  bull: { label: "Bull", color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-200", tooltip: "Optimistic scenario — assumes strong execution, favorable market conditions, and above-trend growth." },
+  base: { label: "Base", color: "text-blue-700",    bg: "bg-blue-50",    border: "border-blue-200",    tooltip: "Most likely scenario — assumes current trends continue at a moderate pace with no major surprises." },
+  bear: { label: "Bear", color: "text-red-700",     bg: "bg-red-50",     border: "border-red-200",     tooltip: "Pessimistic scenario — assumes headwinds, margin pressure, or slower-than-expected growth." },
+};
+
+const INPUT_TOOLTIPS = {
+  revenue_growth:    "How much you expect the company's total sales to grow over the next 12 months.",
+  operating_margin:  "The % of projected revenue you expect to remain as operating profit after all costs.",
+  fcf_margin:        "The % of projected revenue you expect to convert into free cash flow — real cash after capex.",
 };
 
 function NumberInput({
-  label, value, onChange, isPercent = true,
-}: { label: string; value: number; onChange: (v: number) => void; isPercent?: boolean }) {
+  label, value, onChange, isPercent = true, tooltip,
+}: { label: string; value: number; onChange: (v: number) => void; isPercent?: boolean; tooltip?: string }) {
   return (
     <div>
-      <label className="text-xs text-gray-500 block mb-1">{label}</label>
+      <div className="flex items-center gap-1.5 mb-1">
+        <label className="text-xs text-gray-500">{label}</label>
+        {tooltip && <Tooltip text={tooltip} width="lg" />}
+      </div>
       <div className="flex items-center gap-1">
         <input
           type="number"
@@ -133,22 +143,28 @@ export default function ScenarioPage() {
           const meta = SCENARIO_META[sc];
           return (
             <div key={sc} className={`bg-white border ${meta.border} rounded-xl p-5`}>
-              <p className={`text-sm font-bold ${meta.color} mb-4`}>{meta.label} Case</p>
+              <div className="flex items-center gap-1.5 mb-4">
+                <p className={`text-sm font-bold ${meta.color}`}>{meta.label} Case</p>
+                <Tooltip text={meta.tooltip} width="lg" />
+              </div>
               <div className="flex flex-col gap-3">
                 <NumberInput
                   label="Revenue Growth"
                   value={inputs[sc].revenue_growth}
                   onChange={(v) => updateAssumption(sc, "revenue_growth", v)}
+                  tooltip={INPUT_TOOLTIPS.revenue_growth}
                 />
                 <NumberInput
                   label="Operating Margin"
                   value={inputs[sc].operating_margin}
                   onChange={(v) => updateAssumption(sc, "operating_margin", v)}
+                  tooltip={INPUT_TOOLTIPS.operating_margin}
                 />
                 <NumberInput
                   label="FCF Margin"
                   value={inputs[sc].fcf_margin}
                   onChange={(v) => updateAssumption(sc, "fcf_margin", v)}
+                  tooltip={INPUT_TOOLTIPS.fcf_margin}
                 />
               </div>
             </div>
