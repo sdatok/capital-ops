@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.companies import router as companies_router
 from app.api.routes.health import router as health_router
+from app.api.routes.peers import router as peers_router
+from app.api.routes.scenario import router as scenario_router
 from app.core.config import settings
 
 
@@ -32,6 +34,8 @@ def create_app() -> FastAPI:
 
     app.include_router(health_router, tags=["health"])
     app.include_router(companies_router)
+    app.include_router(peers_router)
+    app.include_router(scenario_router)
 
     return app
 

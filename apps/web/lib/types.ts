@@ -36,3 +36,60 @@ export interface CompanyOverview {
 }
 
 export type MetricKey = keyof DerivedMetrics;
+
+// Scenario
+export interface ScenarioAssumptions {
+  revenue_growth: number;
+  operating_margin: number;
+  fcf_margin: number;
+}
+
+export interface ScenarioInputs {
+  bull: ScenarioAssumptions;
+  base: ScenarioAssumptions;
+  bear: ScenarioAssumptions;
+}
+
+export interface ScenarioProjection {
+  label: string;
+  assumptions: ScenarioAssumptions;
+  projected_revenue: number;
+  projected_operating_income: number;
+  projected_fcf: number;
+}
+
+export interface ScenarioResponse {
+  company_symbol: string;
+  base_period: string;
+  base_revenue: number;
+  projections: ScenarioProjection[];
+}
+
+export interface MemoResponse {
+  memo_text: string;
+  company_symbol: string;
+  selected_scenario: string;
+}
+
+export interface SaveAnalysisResponse {
+  id: string;
+}
+
+// Peer comparison
+export interface PeerMetricSeries {
+  symbol: string;
+  name: string;
+  periods: string[];
+  values: (number | null)[];
+}
+
+export interface MetricComparison {
+  metric_key: string;
+  metric_label: string;
+  series: PeerMetricSeries[];
+  latest_ranking: string[];
+}
+
+export interface PeerCompareResponse {
+  comparisons: MetricComparison[];
+}

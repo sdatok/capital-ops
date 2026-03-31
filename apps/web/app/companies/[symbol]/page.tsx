@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import MarginsChart from "@/components/MarginsChart";
 import MetricCard from "@/components/MetricCard";
@@ -12,6 +12,7 @@ import type { CompanyOverview } from "@/lib/types";
 export default function CompanyOverviewPage() {
   const params = useParams();
   const symbol = (params.symbol as string).toUpperCase();
+  const router = useRouter();
 
   const [data, setData] = useState<CompanyOverview | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,9 +58,23 @@ export default function CompanyOverviewPage() {
               {data.sector} &middot; {data.industry} &middot; FY ends {data.fiscal_year_end_month}
             </p>
           </div>
-          <span className="text-xs font-medium bg-blue-50 text-blue-700 px-3 py-1 rounded-full">
-            FY{lastPeriod} data
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium bg-blue-50 text-blue-700 px-3 py-1 rounded-full">
+              FY{lastPeriod} data
+            </span>
+            <button
+              onClick={() => router.push(`/companies/${symbol}/peers`)}
+              className="text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors"
+            >
+              Compare peers →
+            </button>
+            <button
+              onClick={() => router.push(`/companies/${symbol}/scenario`)}
+              className="text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors"
+            >
+              Scenarios →
+            </button>
+          </div>
         </div>
       </div>
 

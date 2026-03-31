@@ -4,3 +4,4 @@ pydantic-settings
 psycopg[binary]
 duckdb
 python-dotenv
+yfinance
